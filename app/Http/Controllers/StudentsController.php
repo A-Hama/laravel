@@ -17,6 +17,7 @@ class StudentsController extends Controller
         $query = \App\student::query();
         $students = $query->->orderBy('id','desc')->paginate(10);
         return $students;
+        
     }
 
     /**
