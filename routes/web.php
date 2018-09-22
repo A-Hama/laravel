@@ -15,4 +15,4 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::resource('students', 'StudentsController');
+Route::get('/', 'StudentController@index');
