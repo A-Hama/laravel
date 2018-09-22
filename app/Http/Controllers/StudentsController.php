@@ -12,12 +12,17 @@ class StudentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $req)
     {
-        $query = \App\student::query();
-        $students = $query->->orderBy('id','desc')->paginate(10);
-        return $students;
-        
+        $keyword = $req->input('keyword');
+        $query = \App\Student::query();
+
+        if(!empty($keyword)){
+            $query->where('email','like','%'.$keyword.'%');
+            $query->orWhere('name','like','%'.$keyword.'%');
+        }
+        $students = $query->orderBy('id','desc')->paginate(10);
+        return view('student.all')->with('students',$students)->with('keyword', $keyword);
     }
 
     /**
@@ -27,7 +32,13 @@ class StudentsController extends Controller
      */
     public function create()
     {
-        //
+        return view('student.create');
+    }
+
+    public function confirm(\App\Http\Requests\CheckStudentRequest $req)
+    {
+        $data = $req->all();
+        return view('student.confirm')->with($data);
     }
 
     /**
@@ -36,9 +47,14 @@ class StudentsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $req)
     {
-        //
+        $student = new Student;
+        $student->name = $req->name;
+        $student->email = $req->email;
+        $student->tel = $req->tel;
+        $student->save();
+        return redirect()->to('/');
     }
 
     /**
@@ -60,7 +76,8 @@ class StudentsController extends Controller
      */
     public function edit($id)
     {
-        //
+        $student = Student::findOrFail($id);
+        return view('student.edit')->with('student',$student);
     }
 
     /**
@@ -70,9 +87,14 @@ class StudentsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $req, $id)
     {
-        //
+        $student = Student::findOrFail($id);
+        $student->name = $req->name;
+        $student->email = $req->email;
+        $student->tel = $req->tel;
+        $student->save();
+        return redirect()->to('/');
     }
 
     /**
@@ -83,6 +105,8 @@ class StudentsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = Student::find($id);
+        $user->delete();
+        return redirect()->to('/');
     }
 }
