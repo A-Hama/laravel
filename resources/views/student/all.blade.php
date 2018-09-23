@@ -51,7 +51,7 @@
       <td>{{$student->email}}</td>
       <td>{{$student->tel}}</td>
     <td>
-      <a href="" class="btn btn-primary btn-sm">詳細</a>
+      <a href="/students/{{$student->id}}" class="btn btn-primary btn-sm">詳細</a>
       <a href="/students/{{$student->id}}/edit" class="btn btn-primary btn-sm">編集</a>
       <form action="/students/{{$student->id}}" method="post">
         {{ csrf_field() }}
