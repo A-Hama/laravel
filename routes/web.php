@@ -21,4 +21,10 @@ Route::group(['prefix' => 'students'], function(){
     Route::post('/{id}/edit', 'StudentsController@update');
 });
 
+Route::group(['prefix'=>'user'], function(){
+}
+
 Route::resource('students', 'StudentsController');
+
+Auth::routes();
+

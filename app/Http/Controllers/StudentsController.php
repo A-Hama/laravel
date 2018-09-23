@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\student;
+use Auth;
 
 class StudentsController extends Controller
 {
@@ -12,6 +13,12 @@ class StudentsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+    public function __construct()
+    {
+        $this->middleware('auth')->except(['index', 'show']);
+    }
+
     public function index(Request $req)
     {
         $keyword = $req->input('keyword');
@@ -65,7 +72,8 @@ class StudentsController extends Controller
      */
     public function show($id)
     {
-        //
+        $student = Student::findOrFail($id);
+        return view('student.show')->with('student',$student);
     }
 
     /**
